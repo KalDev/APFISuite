@@ -121,7 +121,7 @@ Public Class APFICrypto
 
     End Sub
 
-    Public Function GenSalt(Optional ByVal pChars As Integer = 20) As String
+    Public Function GeMainCryptolt(Optional ByVal pChars As Integer = 20) As String
         Dim saltValue As String = ""
         Dim worker As System.Security.Cryptography.SHA256 = SHA256Managed.Create
         Dim workerByte As Byte()

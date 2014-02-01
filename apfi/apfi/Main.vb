@@ -1,7 +1,7 @@
 ﻿Module Main
 
-    Dim HAL2000 As New APFIHelper
-    Dim NSA As New APFIcrypto
+    Dim MainHelper As New APFIHelper
+    Dim MainCrypto As New APFICrypto
 
 
     Sub Main()
@@ -11,12 +11,12 @@
         Select Case doAction
             Case "pseud"
                 'Actually do some pseudonimisation
-                NSA.Pseudo(HAL2000)
-                Console.WriteLine("Success, SALT is " & NSA.Salt)
+                MainCrypto.Pseudo(MainHelper)
+                Console.WriteLine("Success, SALT is " & MainCrypto.Salt)
             Case "gentest"
-                HAL2000.GenerateTestFile(HAL2000.TestRows)
+                MainHelper.GenerateTestFile(MainHelper.TestRows)
             Case "gennum"
-                HAL2000.GenNHSNumberList()
+                MainHelper.GenNHSNumberList()
             Case Else
 
         End Select
@@ -42,7 +42,7 @@
             End
         End If
 
-        If clArgs(1).ToLower = "-help" Then HAL2000.PrintHelp()
+        If clArgs(1).ToLower = "-help" Then MainHelper.PrintHelp()
 
         ' The harder part, parse the arguments and do something useful
         Dim argValue As Boolean = False
@@ -50,38 +50,40 @@
         For i = 1 To clArgs.Length - 1
             Select Case clArgs(i)
                 Case "-c"
-                    HAL2000.ConfigFile = clArgs(i + 1)
+                    MainHelper.ConfigFile = clArgs(i + 1)
                     i = i + 1
                 Case "-cl"
-                    HAL2000.ColumnToHash = clArgs(i + 1)
+                    MainHelper.ColumnToHash = clArgs(i + 1)
                     i = i + 1
                 Case "-o"
-                    HAL2000.OutputFile = clArgs(i + 1)
+                    MainHelper.OutputFile = clArgs(i + 1)
                     i = i + 1
                 Case "-i"
-                    HAL2000.InputFile = clArgs(i + 1)
+                    MainHelper.InputFile = clArgs(i + 1)
                     i = i + 1
                 Case "-s"
-                    NSA.Salt = clArgs(i + 1)
-                    If NSA.Salt.Length > 64 Then
-                        NSA.Salt = NSA.Salt.Substring(0, 63)
+                    MainCrypto.Salt = clArgs(i + 1)
+                    If MainCrypto.Salt.Length > 64 Then
+                        MainCrypto.Salt = MainCrypto.Salt.Substring(0, 63)
                     End If
                     i = i + 1
                 Case "-sr"
-                    NSA.Salt = NSA.GenSalt()
+                    MainCrypto.Salt = MainCrypto.GeMainCryptolt()
                 Case "-genNum"
                     postAction = "gennum"
+                Case "-rn"
+                    MainHelper.RealNHSNumber = True
                 Case "-h"
-                    HAL2000.HasHeaders = True
+                    MainHelper.HasHeaders = True
                 Case "-p"
                     postAction = "pseud"
                 Case "-lc"
-                    NSA.CertLocation = clArgs(i + 1)
-                    NSA.GetCertificates()
-                    Console.Write(NSA.PrintCertificateDetails())
+                    MainCrypto.CertLocation = clArgs(i + 1)
+                    MainCrypto.GetCertificates()
+                    Console.Write(MainCrypto.PrintCertificateDetails())
                     i = i + 1
                 Case "-g"
-                    HAL2000.TestRows = clArgs(i + 1)
+                    MainHelper.TestRows = clArgs(i + 1)
                     postAction = "gentest"
                     i = i + 1
             End Select
