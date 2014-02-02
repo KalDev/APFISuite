@@ -1,7 +1,9 @@
-﻿Module Main
+﻿Imports APFI
 
-    Dim MainHelper As New APFIHelper
-    Dim MainCrypto As New APFICrypto
+Module Main
+
+    Dim MainHelper As New Helper
+    Dim MainCrypto As New Crypto
 
 
     Sub Main()

@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 
 
-Public Class APFIHelper
+Public Class Helper
     Public Property ColumnToHash() As Integer
     Public Property ConfigFile() As String
     Public Property OutputFile() As String = ""

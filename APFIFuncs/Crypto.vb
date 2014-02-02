@@ -3,7 +3,8 @@ Imports System.Security.Cryptography
 Imports System.IO
 Imports System.Text
 
-Public Class APFICrypto
+
+Public Class Crypto
     Private certLocationValue As String
     Private certNameValues As List(Of String)
     Private activeCertificateValue As X509Certificate
@@ -52,7 +53,7 @@ Public Class APFICrypto
 #End Region
 
 
-    Public Sub Pseudo(ByRef myHelper As apfi.APFIHelper)
+    Public Sub Pseudo(ByRef myHelper As Helper)
         Dim LineCount As Integer = 0
         Dim Lines10 As Integer = 0
         Dim LoopLine As Integer = 0
@@ -96,7 +97,7 @@ Public Class APFICrypto
                 If i <> cols.Length - 1 Then
                     swWriter.Write(",")
                 End If
-                
+
             Next
 
             swWriter.Write(vbCrLf)

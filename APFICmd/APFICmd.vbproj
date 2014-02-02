@@ -9,13 +9,14 @@
     </SchemaVersion>
     <ProjectGuid>{F8988D0C-5543-48D0-B7F5-B85C6C266460}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>apfi.Main</StartupObject>
-    <RootNamespace>apfi</RootNamespace>
-    <AssemblyName>apfi</AssemblyName>
+    <StartupObject>APFI.Main</StartupObject>
+    <RootNamespace>APFI</RootNamespace>
+    <AssemblyName>APFICmd</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -39,8 +40,9 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>apfi.xml</DocumentationFile>
+    <DocumentationFile>APFICmd.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -49,8 +51,9 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>apfi.xml</DocumentationFile>
+    <DocumentationFile>APFICmd.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -84,8 +87,6 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="APFICrypto.vb" />
-    <Compile Include="APFIHelper.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -112,6 +113,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Certs\APFI1\server.crt" />
     <None Include="Certs\APFI1\server.key" />
     <None Include="default.conf" />
@@ -146,6 +148,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\APFIFuncs\APFIFuncs.vbproj">
+      <Project>{64b172e0-fb5c-49ed-9fe5-2a832c3698ac}</Project>
+      <Name>APFIFuncs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
