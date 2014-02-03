@@ -4,6 +4,7 @@ Module Main
 
     Dim MainHelper As New Helper
     Dim MainCrypto As New Crypto
+    Dim MainRainbow As New Rainbow
 
 
     Sub Main()
@@ -18,7 +19,7 @@ Module Main
             Case "gentest"
                 MainHelper.GenerateTestFile(MainHelper.TestRows)
             Case "gennum"
-                MainHelper.GenNHSNumberList()
+                MainRainbow.GenNHSNumberList(MainHelper)
             Case Else
 
         End Select
@@ -44,7 +45,7 @@ Module Main
             End
         End If
 
-        If clArgs(1).ToLower = "-help" Then MainHelper.PrintHelp()
+        If clArgs(1).ToLower = "-help" Then PrintHelp()
 
         ' The harder part, parse the arguments and do something useful
         Dim argValue As Boolean = False
@@ -94,5 +95,36 @@ Module Main
         Return postAction
     End Function
 
+    Public Sub PrintHelp()
+        Console.Write(vbCrLf & _
+                "***** APFI Help v0.0.1 *****" & vbCrLf & _
+                " " & vbCrLf & _
+                "APFI is a command line Pseuodonimisation tool free for use." & vbCrLf & _
+                "Released under GPL License 3.0, James Wood - apfi@twistedknowledge.co.uk" & vbCrLf & _
+                " " & vbCrLf & _
+                "NOTE Error Checking is NOT implemented so use correctly!" & vbCrLf & _
+                " " & vbCrLf & _
+                "**Any variables set by switch will override the default AND config file values**" & vbCrLf & _
+                " " & vbCrLf & _
+                "General Parameters" & vbCrLf & _
+                "-help        - This help file" & vbCrLf & _
+                "-c  <file>   - Override the default.conf config file and use" & vbCrLf & _
+                "-cl <x>      - Zero based index of the column to hash" & vbCrLf & _
+                "-o  <file>   - Override the default output location of output.csv" & vbCrLf & _
+                "-i  <file>   - Override the default input location of input.csv" & vbCrLf & _
+                "-s  <salt>   - Use <salt> as string for salt, 6-64 chars only" & vbCrLf & _
+                "-sr <6-64>   - Use a random salt <6-64> chars in length" & vbCrLf & _
+                "-h           - Input and Output Files have column headers" & vbCrLf & _
+                " " & vbCrLf & _
+                "Exclusive Parameters" & vbCrLf & _
+                "-p           - Perform Pseudo Operation" & vbCrLf & _
+                "-g  <x>      - Generate a test file (testfile.csv) of <x> rows" & vbCrLf & _
+                " " & vbCrLf & _
+                "Testing and Debugging" & vbCrLf & _
+                "-lc <loc>    - Load Certificates from specified location and display results" & vbCrLf & _
+                "-rn          - Generate Real NHS Number instead of default fake" & vbCrLf & _
+                "-genNum      - Generate valid NHS Number List - WARNING LONG TIME TO RUN!" & vbCrLf & _
+                "....." & vbCrLf)
+    End Sub
 
 End Module
