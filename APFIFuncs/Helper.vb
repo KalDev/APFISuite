@@ -2,30 +2,43 @@
 
 
 Public Class Helper
-    Public Property ColumnToHash() As Integer
-    Public Property ConfigFile() As String
-    Public Property OutputFile() As String = ""
-    Public Property InputFile() As String
-    Public Property HasHeaders() As Boolean
+
+#Region "Properties"
+    Public Property ColumnToHash() As Integer = 0
+    Public Property ConfigFile() As String = "default.conf"
+    Public Property OutputFile() As String = "output.csv"
+    Public Property InputFile() As String = "input.csv"
+    Public Property HasHeaders() As Boolean = False
+
+    Dim _TestRows As Integer
     Public Property TestRows() As Integer
+        Set(NumRows As Integer)
+            If NumRows < 0 Then
+                _TestRows = 1000
+            Else
+                _TestRows = NumRows
+            End If
+
+        End Set
+        Get
+            Return _TestRows
+        End Get
+    End Property
+
     Public Property RealNHSNumber() As Boolean = False
+    Public Property SaltFile As Boolean = False
+#End Region
 
 #Region "TestFiles - testfile generation code"
 
-    Public Sub GenerateTestFile(Optional ByVal NumRows As Integer = 1000)
-        'This will generate a sample file for us.
-        Dim _OutputFile As String = Me.OutputFile
+    Public Sub GenerateTestFile()
+        Dim OutWrite As New StreamWriter(Me.OutputFile)
 
-        If _OutputFile = "" Then
-            _OutputFile = "testfile.csv"
+        If Me.HasHeaders Then
+            OutWrite.Write("NHS#, dob, test1, test 2, test 3" & vbCrLf)
         End If
 
-        Dim OutWrite As New StreamWriter(_OutputFile)
-
-
-        OutWrite.Write("NHS#, dob, test1, test 2, test 3" & vbCrLf)
-
-        For i As Integer = 1 To NumRows
+        For i As Integer = 1 To Me.TestRows
             OutWrite.Write(GenFakeNHSNumber() & ",")
             OutWrite.Write(GenDOB() & ",")
             OutWrite.Write(CInt(Int((10 * Rnd()) + 1)) & ",")
@@ -37,16 +50,9 @@ Public Class Helper
 
     End Sub
 
-    Private Function GenFakeNHSNumber() As String
-        Dim vOutput As String = ""
+#End Region
 
-        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
-        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
-        vOutput = vOutput & CInt(Int((9999 * Rnd()) + 1000))
-
-        Return vOutput
-    End Function
-
+#Region "Public Functions / Subs"
     Public Function CheckNHSNumber(ByVal iNHSNumber As Integer) As Integer
         Dim iArray() As Integer
         Dim numSum As Integer = 0
@@ -68,6 +74,18 @@ Public Class Helper
         End If
         Return DivRem
     End Function
+#End Region
+
+#Region "Private Functions / Subs"
+    Private Function GenFakeNHSNumber() As String
+        Dim vOutput As String = ""
+
+        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
+        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
+        vOutput = vOutput & CInt(Int((9999 * Rnd()) + 1000))
+
+        Return vOutput
+    End Function
 
     Private Function BreakNumber(ByVal iNumber As Integer) As Integer()
         Dim sString As String = iNumber.ToString
@@ -85,9 +103,7 @@ Public Class Helper
         vOutput = FormatDateTime(vOutput, DateFormat.ShortDate)
         Return vOutput
     End Function
-
 #End Region
-
 
     ' Code taken from http://bytes.com/topic/net/answers/439009-what-fastest-way-count-lines-text-file
     Public Function GetLineCount(ByVal FileName As String) As Integer
@@ -127,7 +143,7 @@ Public Class Helper
         Return total
     End Function
 
-    
+
 
 
 End Class

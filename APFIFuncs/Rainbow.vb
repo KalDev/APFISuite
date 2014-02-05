@@ -42,11 +42,25 @@ Public Class Rainbow
         Dim StartChar As Char = ""
         Dim inLine As String = ""
         Dim LineCounter As Integer = 0
-        Dim lTempList As List(Of String)
+        Dim _lTempList As New List(Of String)
+
+        Dim _Directory As String = Environment.GetCommandLineArgs()(0).Substring(0, Environment.GetCommandLineArgs()(0).LastIndexOf("\") + 1) & "SPLITFILES - " & mHelper.InputFile.Substring(0, mHelper.InputFile.IndexOf("."))
+
+
+        If My.Computer.FileSystem.DirectoryExists(_Directory) Then
+            My.Computer.FileSystem.DeleteDirectory(_Directory, FileIO.DeleteDirectoryOption.DeleteAllContents)
+        End If
+
+        Directory.CreateDirectory(_Directory)
 
         If mHelper.HasHeaders Then
             swReader.ReadLine()
         End If
+
+        'Initialise the LIST
+        For x As Integer = 0 To 15
+            OutputList.Add(New List(Of String))
+        Next
 
         inLine = swReader.ReadLine()
 
@@ -55,60 +69,46 @@ Public Class Rainbow
             StartChar = inLine.Substring(0, 1)
 
             'SELECT for now, must be a better way!!!
-            Select StartChar
+            Select Case StartChar
                 Case "0"
-                    lTempList = OutputList(0)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(0)
                 Case "1"
-                    lTempList = OutputList(1)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(1)
                 Case "2"
-                    lTempList = OutputList(2)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(2)
                 Case "3"
-                    lTempList = OutputList(3)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(3)
                 Case "4"
-                    lTempList = OutputList(4)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(4)
                 Case "5"
-                    lTempList = OutputList(5)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(5)
                 Case "6"
-                    lTempList = OutputList(6)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(6)
                 Case "7"
-                    lTempList = OutputList(7)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(7)
                 Case "8"
-                    lTempList = OutputList(8)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(8)
                 Case "9"
-                    lTempList = OutputList(9)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(9)
                 Case "A"
-                    lTempList = OutputList(10)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(10)
                 Case "B"
-                    lTempList = OutputList(11)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(11)
                 Case "C"
-                    lTempList = OutputList(12)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(12)
                 Case "D"
-                    lTempList = OutputList(13)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(13)
                 Case "E"
-                    lTempList = OutputList(14)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(14)
                 Case "F"
-                    lTempList = OutputList(15)
-                    lTempList(lTempList.Count + 1) = inLine
+                    _lTempList = OutputList(15)
             End Select
+
+            _lTempList.Add(inLine)
 
             ' Check every 10000 lines if we have to dump the arrays out.
             If LineCounter >= 10000 Then
-                WriteToFile(OutputList)
+                WriteToFile(OutputList, _Directory)
                 LineCounter = 0
             Else
                 LineCounter = LineCounter + 1
@@ -119,23 +119,21 @@ Public Class Rainbow
         End While
 
         ' This cleans up the arrays and finalises the writes
-        WriteToFile(OutputList, True)
+        WriteToFile(OutputList, _Directory, True)
     End Sub
 
-    Private Sub WriteToFile(ByRef mList As List(Of List(Of String)), Optional mFinalise As Boolean = False)
+    Private Sub WriteToFile(ByRef mList As List(Of List(Of String)), oDirectory As String, Optional mFinalise As Boolean = False)
         Dim swWriter As StreamWriter
         For Each j As List(Of String) In mList
-            If j.Count > 9999 Or mFinalise = True Then
-                swWriter = New StreamWriter(j(0).Substring(0, 1) & "Out.txt", True)
+            If (j.Count > 9999 Or mFinalise = True) And j.Count > 0 Then
+                swWriter = New StreamWriter(oDirectory & "\" & j(0).Substring(0, 1) & "Out.txt", True)
                 For i As Integer = 0 To j.Count - 1
                     swWriter.WriteLine(j(i))
                 Next
                 j.Clear()
                 swWriter.Close()
             End If
-        Next
-
-
+        Next j
     End Sub
 
 

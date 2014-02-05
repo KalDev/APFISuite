@@ -17,9 +17,11 @@ Module Main
                 MainCrypto.Pseudo(MainHelper)
                 Console.WriteLine("Success, SALT is " & MainCrypto.Salt)
             Case "gentest"
-                MainHelper.GenerateTestFile(MainHelper.TestRows)
+                MainHelper.GenerateTestFile()
             Case "gennum"
                 MainRainbow.GenNHSNumberList(MainHelper)
+            Case "splithash"
+                MainRainbow.SplitHashFile(MainHelper)
             Case Else
 
         End Select
@@ -27,14 +29,8 @@ Module Main
 
     Public Function ParseCommandLine() As String
         ' Get the values of the command line in an array
-        ' Index  Discription
-        ' 0      Full path of executing program with program name
-        ' 1      First switch in command in your example -t
-        ' 2      First value in command in your example text1
-        ' 3      Second switch in command in your example -s
-        ' 4      Second value in command in your example text2
 
-        Dim clArgs() As String = Environment.GetCommandLineArgs()
+        Dim clArgs As String() = Environment.GetCommandLineArgs()
         ' Hold the command line values
 
         'This will hold any actions to perform once the command line params have been parsed.
@@ -70,8 +66,12 @@ Module Main
                         MainCrypto.Salt = MainCrypto.Salt.Substring(0, 63)
                     End If
                     i = i + 1
+                Case "-sf"
+                    MainHelper.SaltFile = True
                 Case "-sr"
-                    MainCrypto.Salt = MainCrypto.GeMainCryptolt()
+                    MainCrypto.Salt = MainCrypto.GenSalt()
+                Case "-sh"
+                    postAction = "splithash"
                 Case "-genNum"
                     postAction = "gennum"
                 Case "-rn"
@@ -99,10 +99,11 @@ Module Main
         Console.Write(vbCrLf & _
                 "***** APFI Help v0.0.1 *****" & vbCrLf & _
                 " " & vbCrLf & _
-                "APFI is a command line Pseuodonimisation tool free for use." & vbCrLf & _
+                "APFI is a command line Pseudonimisation tool free for use." & vbCrLf & _
                 "Released under GPL License 3.0, James Wood - apfi@twistedknowledge.co.uk" & vbCrLf & _
                 " " & vbCrLf & _
                 "NOTE Error Checking is NOT implemented so use correctly!" & vbCrLf & _
+                "ALL file parameters expect a file extension of some form i.e. test.txt" & vbCrLf & _
                 " " & vbCrLf & _
                 "**Any variables set by switch will override the default AND config file values**" & vbCrLf & _
                 " " & vbCrLf & _
@@ -114,11 +115,13 @@ Module Main
                 "-i  <file>   - Override the default input location of input.csv" & vbCrLf & _
                 "-s  <salt>   - Use <salt> as string for salt, 6-64 chars only" & vbCrLf & _
                 "-sr <6-64>   - Use a random salt <6-64> chars in length" & vbCrLf & _
+                "-sf          - Use when hashing a list to a Rainbow table" & vbCrLf & _
                 "-h           - Input and Output Files have column headers" & vbCrLf & _
                 " " & vbCrLf & _
                 "Exclusive Parameters" & vbCrLf & _
                 "-p           - Perform Pseudo Operation" & vbCrLf & _
-                "-g  <x>      - Generate a test file (testfile.csv) of <x> rows" & vbCrLf & _
+                "-g  <x>      - Generate a test file of <x> rows" & vbCrLf & _
+                "-sh          - Use to split a large hash file to components" & vbCrLf & _
                 " " & vbCrLf & _
                 "Testing and Debugging" & vbCrLf & _
                 "-lc <loc>    - Load Certificates from specified location and display results" & vbCrLf & _

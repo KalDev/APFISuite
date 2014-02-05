@@ -3,25 +3,14 @@ Imports System.Security.Cryptography
 Imports System.IO
 Imports System.Text
 
-
 Public Class Crypto
-    Private certLocationValue As String
-    Private certNameValues As List(Of String)
-    Private activeCertificateValue As X509Certificate
-    Private saltValue As String
 
 #Region "Properties"
     Public Property CertLocation() As String
-        Get
-            ' Gets the property value. 
-            Return certLocationValue
-        End Get
-        Set(ByVal Value As String)
-            ' Sets the property value.
-            certLocationValue = Value
-        End Set
-    End Property
+    Public Property ActiveCertificate As X509Certificate
+    Public Property Salt As String
 
+    Private certNameValues As List(Of String)
     Public ReadOnly Property CertNames() As List(Of String)
         Get
             ' Gets the property value. 
@@ -29,30 +18,9 @@ Public Class Crypto
         End Get
     End Property
 
-    Public Property ActiveCertificate As X509Certificate
-        Get
-            ' Gets the property value. 
-            Return activeCertificateValue
-        End Get
-        Set(ByVal Value As X509Certificate)
-            ' Sets the property value.
-            activeCertificateValue = Value
-        End Set
-    End Property
-
-    Public Property Salt As String
-        Get
-            ' Gets the property value. 
-            Return saltValue
-        End Get
-        Set(ByVal Value As String)
-            ' Sets the property value.
-            saltValue = Value
-        End Set
-    End Property
 #End Region
 
-
+#Region "Main Functions / Subs"
     Public Sub Pseudo(ByRef myHelper As Helper)
         Dim LineCount As Integer = 0
         Dim Lines10 As Integer = 0
@@ -98,6 +66,10 @@ Public Class Crypto
                     swWriter.Write(",")
                 End If
 
+                'This is specific to creating the salt files for rainbow tables.
+                If myHelper.SaltFile Then
+                    swWriter.Write("," & cols(i))
+                End If
             Next
 
             swWriter.Write(vbCrLf)
@@ -121,22 +93,9 @@ Public Class Crypto
         swReader.Close()
 
     End Sub
+#End Region
 
-    Public Function GeMainCryptolt(Optional ByVal pChars As Integer = 20) As String
-        Dim saltValue As String = ""
-        Dim worker As System.Security.Cryptography.SHA256 = SHA256Managed.Create
-        Dim workerByte As Byte()
-
-        workerByte = Encoding.UTF8.GetBytes(Guid.NewGuid.ToString)
-        workerByte = worker.ComputeHash(workerByte)
-
-        saltValue = PrintByteArray(workerByte)
-
-        Return saltValue.Substring(0, pChars)
-    End Function
-
-
-
+#Region "Certificate Functions / Subs"
     Public Sub GetCertificates()
         ' Read the cert files from the given location
 
@@ -153,9 +112,37 @@ Public Class Crypto
 
         Return sOutput
     End Function
+#End Region
 
+#Region "Public Functions / Subs"
+    ''' <summary>
+    ''' Generates a SALT value of a given length.
+    ''' </summary>
+    ''' <param name="pChars">(Optional) Number of Characters to return</param>
+    ''' <returns>String</returns>
+    ''' <remarks></remarks>
+    Public Function GenSalt(Optional ByVal pChars As Integer = 20) As String
+        Dim saltValue As String = ""
+        Dim worker As System.Security.Cryptography.SHA256 = SHA256Managed.Create
+        Dim workerByte As Byte()
 
-    Public Shared Function PrintByteArray(ByVal array() As Byte) As String
+        workerByte = Encoding.UTF8.GetBytes(Guid.NewGuid.ToString)
+        workerByte = worker.ComputeHash(workerByte)
+
+        saltValue = PrintByteArray(workerByte)
+
+        Return saltValue.Substring(0, pChars)
+    End Function
+#End Region
+
+#Region "Private Worker Functions / Subs"
+    ''' <summary>
+    ''' Prints a byte array as characters
+    ''' </summary>
+    ''' <param name="array">Byte array to be printed</param>
+    ''' <returns>String</returns>
+    ''' <remarks></remarks>
+    Private Function PrintByteArray(ByVal array() As Byte) As String
         Dim i As Integer
         Dim outputVal As String = ""
 
@@ -166,11 +153,6 @@ Public Class Crypto
         Return outputVal
 
     End Function
-
-
-
-
-
-
+#End Region
 
 End Class
