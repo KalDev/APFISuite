@@ -38,8 +38,15 @@ Public Class Helper
             OutWrite.Write("NHS#, dob, test1, test 2, test 3" & vbCrLf)
         End If
 
+        Randomize()
+
         For i As Integer = 1 To Me.TestRows
-            OutWrite.Write(GenFakeNHSNumber() & ",")
+            If Me.RealNHSNumber Then
+                OutWrite.Write(GenRealNHSNumber() & ",")
+            Else
+                OutWrite.Write(GenFakeNHSNumber() & ",")
+            End If
+
             OutWrite.Write(GenDOB() & ",")
             OutWrite.Write(CInt(Int((10 * Rnd()) + 1)) & ",")
             OutWrite.Write(CInt(Int((250 * Rnd()) + 100)) & ",")
@@ -80,11 +87,25 @@ Public Class Helper
     Private Function GenFakeNHSNumber() As String
         Dim vOutput As String = ""
 
-        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
-        vOutput = vOutput & CInt(Int((999 * Rnd()) + 100)) & " "
-        vOutput = vOutput & CInt(Int((9999 * Rnd()) + 1000))
+        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100)) & " "
+        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100)) & " "
+        vOutput = vOutput & CInt(Int((8999 * Rnd()) + 1000))
 
         Return vOutput
+    End Function
+
+    Private Function GenRealNHSNumber() As String
+        Dim vOutput As Integer = 0
+        Dim vCheckDigit As Integer = 0
+
+        Randomize()
+
+        Do
+            vOutput = CInt(Int((100000000 * Rnd()) + 499999999))
+            vCheckDigit = CheckNHSNumber(vOutput)
+        Loop Until vCheckDigit > -1
+
+        Return CStr(vOutput & vCheckDigit)
     End Function
 
     Private Function BreakNumber(ByVal iNumber As Integer) As Integer()

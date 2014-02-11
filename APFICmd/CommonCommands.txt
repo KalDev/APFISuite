@@ -1,0 +1,18 @@
+﻿# Generate a list of valid NHS Numbers, this will take a long time and results
+# in a 2GB+ file.
+
+apficmd -genNum -o NHSList.csv
+
+# Generate a salted NHS Number list with a given SALT, this will generate a 
+# 12GB+ file. Replace the salt value with required value
+
+apficmd -p -i NHSList.txt -o SaltedList.csv -sf -cl 0 -s 64D2CB7A3FFC98E8208CAA -h
+
+# Generate a test file of 50000 lines (use -h to include a header line)
+
+apficmd -g 50000 -o TestList.csv
+
+# Split a large single hash file into smaller component files
+# This will generate a sub folder in the .exe location
+
+apficmd -sh -i SaltedList.csv

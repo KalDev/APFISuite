@@ -122,6 +122,15 @@ Public Class Rainbow
         WriteToFile(OutputList, _Directory, True)
     End Sub
 
+    Public Sub CompareRainbow(ByVal mHelper As Helper)
+        Dim swReader As New StreamReader(mHelper.InputFile)
+        Dim swWriter As New StreamWriter(mHelper.OutputFile)
+
+
+
+    End Sub
+
+
     Private Sub WriteToFile(ByRef mList As List(Of List(Of String)), oDirectory As String, Optional mFinalise As Boolean = False)
         Dim swWriter As StreamWriter
         For Each j As List(Of String) In mList

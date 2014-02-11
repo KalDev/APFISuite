@@ -22,6 +22,8 @@ Module Main
                 MainRainbow.GenNHSNumberList(MainHelper)
             Case "splithash"
                 MainRainbow.SplitHashFile(MainHelper)
+            Case "raincom"
+
             Case Else
 
         End Select
@@ -68,6 +70,8 @@ Module Main
                     i = i + 1
                 Case "-sf"
                     MainHelper.SaltFile = True
+                Case "-rain-com"
+                    postAction = "raincom"
                 Case "-sr"
                     MainCrypto.Salt = MainCrypto.GenSalt()
                 Case "-sh"
@@ -115,13 +119,16 @@ Module Main
                 "-i  <file>   - Override the default input location of input.csv" & vbCrLf & _
                 "-s  <salt>   - Use <salt> as string for salt, 6-64 chars only" & vbCrLf & _
                 "-sr <6-64>   - Use a random salt <6-64> chars in length" & vbCrLf & _
-                "-sf          - Use when hashing a list to a Rainbow table" & vbCrLf & _
                 "-h           - Input and Output Files have column headers" & vbCrLf & _
                 " " & vbCrLf & _
                 "Exclusive Parameters" & vbCrLf & _
                 "-p           - Perform Pseudo Operation" & vbCrLf & _
                 "-g  <x>      - Generate a test file of <x> rows" & vbCrLf & _
                 "-sh          - Use to split a large hash file to components" & vbCrLf & _
+                " " & vbCrLf & _
+                "Rainbow Tables" & vbCrLf & _
+                "-sf          - Use when hashing a list to a Rainbow table" & vbCrLf & _
+                "-rain-com    - Compare input file to hash files and write to output" & vbCrLf & _
                 " " & vbCrLf & _
                 "Testing and Debugging" & vbCrLf & _
                 "-lc <loc>    - Load Certificates from specified location and display results" & vbCrLf & _
