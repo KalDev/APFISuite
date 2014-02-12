@@ -124,9 +124,47 @@ Public Class Rainbow
 
     Public Sub CompareRainbow(ByVal mHelper As Helper)
         Dim swReader As New StreamReader(mHelper.InputFile)
+        Dim swHash As StreamReader = Nothing
         Dim swWriter As New StreamWriter(mHelper.OutputFile)
 
+        Dim inLine As String = ""
+        Dim inHashLine As String = ""
+        Dim fExit As Boolean = False
+        Dim TotalLines As Integer = 0
+        Dim StartTime As Date = Now()
+        Dim FailCount As Integer = 0
 
+
+        TotalLines = mHelper.GetLineCount(mHelper.InputFile)
+
+        Console.WriteLine("Total Lines to search - " & TotalLines)
+        Console.WriteLine("Start time - " & StartTime.TimeOfDay.ToString)
+
+        Do Until swReader.EndOfStream
+            inLine = swReader.ReadLine()
+            fExit = False
+            swHash = New StreamReader("SPLITFILES - " & mHelper.SplitFiles & "\" & inLine.Substring(0, 1) & "Out.txt")
+
+            Do Until swHash.EndOfStream Or fExit = True
+                inHashLine = swHash.ReadLine
+                If inHashLine.Contains(inLine.Substring(0, inLine.IndexOf(","))) Then
+                    swWriter.WriteLine(inHashLine.Substring(inHashLine.IndexOf(",") + 1, inHashLine.Length - inHashLine.IndexOf(",") - 1) & "," & inLine)
+                    fExit = True
+                End If
+            Loop
+
+            If fExit = False Then
+                swWriter.WriteLine("NO MATCH," & inLine)
+                FailCount = FailCount + 1
+            End If
+
+            swHash.Close()
+        Loop
+
+        swWriter.Close()
+
+        Console.WriteLine("Search finished, total time {0} seconds", DateDiff(DateInterval.Second, StartTime, Now()))
+        Console.WriteLine("Total Failed Matches - {0} or {1}%", FailCount, Math.Round((FailCount / TotalLines) * 100, 2))
 
     End Sub
 

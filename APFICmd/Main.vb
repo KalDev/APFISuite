@@ -23,7 +23,7 @@ Module Main
             Case "splithash"
                 MainRainbow.SplitHashFile(MainHelper)
             Case "raincom"
-
+                MainRainbow.CompareRainbow(MainHelper)
             Case Else
 
         End Select
@@ -70,6 +70,9 @@ Module Main
                     i = i + 1
                 Case "-sf"
                     MainHelper.SaltFile = True
+                Case "-splitfile"
+                    MainHelper.SplitFiles = clArgs(i + 1)
+                    i = i + 1
                 Case "-rain-com"
                     postAction = "raincom"
                 Case "-sr"
@@ -128,6 +131,7 @@ Module Main
                 " " & vbCrLf & _
                 "Rainbow Tables" & vbCrLf & _
                 "-sf          - Use when hashing a list to a Rainbow table" & vbCrLf & _
+                "-splitfile   - Split file name for folder." & vbCrLf & _
                 "-rain-com    - Compare input file to hash files and write to output" & vbCrLf & _
                 " " & vbCrLf & _
                 "Testing and Debugging" & vbCrLf & _

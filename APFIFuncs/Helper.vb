@@ -9,6 +9,7 @@ Public Class Helper
     Public Property OutputFile() As String = "output.csv"
     Public Property InputFile() As String = "input.csv"
     Public Property HasHeaders() As Boolean = False
+    Public Property SplitFiles As String = ""
 
     Dim _TestRows As Integer
     Public Property TestRows() As Integer
@@ -87,8 +88,8 @@ Public Class Helper
     Private Function GenFakeNHSNumber() As String
         Dim vOutput As String = ""
 
-        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100)) & " "
-        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100)) & " "
+        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100))
+        vOutput = vOutput & CInt(Int((899 * Rnd()) + 100))
         vOutput = vOutput & CInt(Int((8999 * Rnd()) + 1000))
 
         Return vOutput
@@ -101,7 +102,7 @@ Public Class Helper
         Randomize()
 
         Do
-            vOutput = CInt(Int((100000000 * Rnd()) + 499999999))
+            vOutput = CInt(Math.Floor((499999999 - 400000000 + 1) * Rnd())) + 400000000
             vCheckDigit = CheckNHSNumber(vOutput)
         Loop Until vCheckDigit > -1
 
